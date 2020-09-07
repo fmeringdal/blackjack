@@ -19,7 +19,7 @@ public class SpyReporter implements IReporter {
     }
 
     @Override
-    public void reportState(List<Player> players) {
+    public void reportNewState(List<Player> players) {
         this.players = players;
     }
     

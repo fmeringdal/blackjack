@@ -15,7 +15,7 @@ public class TerminalReporter implements IReporter {
     }
 
     @Override
-    public void reportState(List<Player> players) {
+    public void reportNewState(List<Player> players) {
         
     }
 }

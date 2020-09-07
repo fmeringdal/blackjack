@@ -13,9 +13,7 @@ public class CardList {
     public int value;
 
     private CardList(String[] cardList){
-        LinkedList<String> cardlist = new LinkedList<>(Arrays.asList(cardList));
-        this.cardList = cardlist
-            .stream()
+        this.cardList = Arrays.stream(cardList)
             .map(c -> new Card(c))
             .collect(Collectors.toCollection(LinkedList::new));
     }
