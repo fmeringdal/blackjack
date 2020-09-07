@@ -9,7 +9,7 @@ import com.blackjack.helpers.SpyReporter;
 
 import org.junit.Test;
 
-public class AppTest 
+public class BlackjackTest 
 {
     @Test
     public void shouldFollowSpecExample()

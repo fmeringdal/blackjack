@@ -7,14 +7,14 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import com.blackjack.utils.Utils;
+
 public class CardList {
     private LinkedList<Card> cardList;
-    // value seems to be a better name than score
-    public int value;
 
     private CardList(String[] cardList){
         this.cardList = Arrays.stream(cardList)
-            .map(c -> new Card(c))
+            .map(Card::new)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -55,7 +55,6 @@ public class CardList {
 
     public void add(Card card){
         this.cardList.add(card);
-        value += card.value;
     }
 
     @Override

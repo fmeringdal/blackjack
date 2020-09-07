@@ -1,19 +1,16 @@
 package com.blackjack;
 
 public class Player {
-    public CardList hand;
+    public CardList hand = CardList.createEmpty();
+    public int score = 0;
     public String name;
 
     public Player(String name) {
         this.name = name;
-        this.hand = CardList.createEmpty();
     }
 
     public void add(Card card) {
         this.hand.add(card);
-    }
-
-    public int getScore() {
-        return this.hand.value;
+        score += card.value;
     }
 }

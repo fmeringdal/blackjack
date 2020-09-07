@@ -31,32 +31,32 @@ public class Blackjack {
         }
 
         // Check if we have a winner after initial cards
-        if(sam.getScore() == 21){
+        if(sam.score == 21){
             this.crownWinner(sam);
             return;
-        } else if (dealer.getScore() == 21){
+        } else if (dealer.score == 21){
             this.crownWinner(dealer);
             return;
         }
         
-        if(dealer.getScore() == 22 && sam.getScore() == 22){
+        if(dealer.score == 22 && sam.score == 22){
             this.crownWinner(dealer);
             return;
         }
 
         // Some while logic
-        while(sam.getScore() < 17){
+        while(sam.score < 17){
             giveCardTo(sam);
-            if(sam.getScore() > 21){
+            if(sam.score > 21){
                 this.crownWinner(dealer);
                 return;
             }
         }
 
         // Some while logic
-        while(dealer.getScore() <= sam.getScore()){
+        while(dealer.score <= sam.score){
             giveCardTo(dealer);
-            if(dealer.getScore() > 21){
+            if(dealer.score > 21){
                 this.crownWinner(sam);
                 return;
             }
