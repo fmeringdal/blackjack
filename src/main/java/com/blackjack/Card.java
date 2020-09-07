@@ -3,14 +3,14 @@ package com.blackjack;
 import java.util.ArrayList;
 
 class Card {
-    public int score;
+    public int value;
     private String representation;
     public Card(String representation){
         this.representation = representation;
-        this.score = getScoreOf(representation);
+        this.value = getValueOf(representation);
     }
 
-    private static Integer getScoreOf(String representation){
+    private static Integer getValueOf(String representation){
         ArrayList<Character> chars = new ArrayList<>();
         chars.add('J');
         chars.add('Q');

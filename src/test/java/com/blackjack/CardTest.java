@@ -10,6 +10,6 @@ public class CardTest
     public void shouldGiveCorrectScoreForCards()
     {
         Card c = new Card("CA");
-        assertEquals(c.score, 11);
+        assertEquals(c.value, 11);
     }
 }

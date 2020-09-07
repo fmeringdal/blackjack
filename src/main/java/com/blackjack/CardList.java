@@ -19,8 +19,7 @@ public class CardList {
     }
 
     public static CardList createFrom(String filepath) throws FileNotFoundException {
-        File file = new File(filepath);
-        Scanner scanner = new Scanner(file);
+        Scanner scanner = new Scanner(new File(filepath));
         String[] cardList = scanner.nextLine().split(",");
         scanner.close();
         return new CardList(cardList);
@@ -41,6 +40,7 @@ public class CardList {
                 counter += 1;
             }
         }
+        Utils.shuffle(cardList);
         return new CardList(cardList);
     }
 
@@ -55,7 +55,7 @@ public class CardList {
 
     public void add(Card card){
         this.cardList.add(card);
-        value += card.score;
+        value += card.value;
     }
 
     @Override
