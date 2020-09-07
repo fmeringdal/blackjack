@@ -1,32 +1,24 @@
 package com.blackjack;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
 
+import com.blackjack.helpers.SpyReporter;
+
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
 public class AppTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldNotThrow()
-    {
-        assertTrue( true );
-    }
-
-
     @Test
     public void shouldFollowSpecExample()
     {   
         CardList cardList = CardList.createFrom(new String[]{ "CA", "D5", "H9", "HQ", "S8" });
-        new Blackjack(cardList, new TerminalReporter()).start();
+        SpyReporter spyReporter = new SpyReporter();
+        new Blackjack(cardList, spyReporter).start();
+        assertEquals(spyReporter.winner.name, "sam");
+        assertEquals(spyReporter.winner.hand.toString(), "CA, H9");
     }
 
 
@@ -36,6 +28,9 @@ public class AppTest
 
         URL url = getClass().getResource("cardlist.txt");
         CardList cardList = CardList.createFrom(url.getPath());
-        new Blackjack(cardList, new TerminalReporter()).start();
+        SpyReporter spyReporter = new SpyReporter();
+        new Blackjack(cardList, spyReporter).start();
+        assertEquals(spyReporter.winner.name, "sam");
+        assertEquals(spyReporter.winner.hand.toString(), "CA, H9");
     }
 }

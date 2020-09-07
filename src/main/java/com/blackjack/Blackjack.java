@@ -1,12 +1,8 @@
 package com.blackjack;
+import com.blackjack.reporters.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-interface IReporter {
-    void reportResult(List<Player> players, Player winner);
-    void reportState(List<Player> players);
-}
 
 
 public class Blackjack {
