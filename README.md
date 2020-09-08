@@ -1,6 +1,6 @@
 # Blackjack
 
-## Compile and execute with maven
+## Compile and execute
 ```
 mvn clean compile exec:java
 ```
