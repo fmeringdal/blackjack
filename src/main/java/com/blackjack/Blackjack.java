@@ -10,7 +10,7 @@ public class Blackjack {
     Player dealer;
 
     public Blackjack(CardList deck, IReporter reporter, String playerName){
-        this.deck = deck;
+        this.deck = deck; // TODO: validate that deck has size 52
         this.reporter = reporter;
         // Initialize player and dealer
         player = new Player(playerName);
