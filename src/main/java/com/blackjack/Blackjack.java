@@ -17,52 +17,46 @@ public class Blackjack {
         dealer = new Player("dealer");
     }
 
+    public void start(){
+        // Initialize hands
+        initializeHands();
+
+        Player winner = checkForInitialBlackjack();
+        if(winner != null){
+            this.crownWinner(winner);
+            return;
+        }
+
+        winner = checkForInitialFourAces();
+        if(winner != null){
+            this.crownWinner(winner);
+            return;
+        }
+        
+        // No winner from initial cards, time to start the roulette stage
+        winner = this.startRoulette();
+        this.crownWinner(winner);
+    }
+
     private void initializeHands(){
         for(int i = 0; i < 4; i++){
             giveCardTo(i%2 == 0 ? player : dealer);
         }
     }
 
-
-    private boolean giveCardUntilScorePasses(Player player, int maxScore){
-        while(player.score < maxScore){
-            giveCardTo(player);
+    // Roulette for player where the player gets a new card until score is between loopUntilScore and 21
+    // If player gets a card that makes his / her hand have a score more than 21 they have lost
+    private boolean startRouletteForPlayer(Player player, int loopUntilScore){
+        while(player.score < loopUntilScore){
+            // We dont have to check for empty deck before givecard to, because the total value of one of 
+            // the players hand will be larger than 21 long before all the cards in the deck have been 
+            // given out. (Because 2*22 is much smaller than the total value of the initial deck)
+            giveCardTo(player);  
             if(player.score > 21){
                 return false;
             }
         }
         return true;
-    }
-
-    public void start(){
-        // Initialize hands
-        initializeHands();
-
-        Player winner = checkForInitialBlackjack(player, dealer);
-        if(winner != null){
-            this.crownWinner(winner);
-            return;
-        }
-
-        winner = checkForInitialFourAces(player, dealer);
-        if(winner != null){
-            this.crownWinner(winner);
-            return;
-        }
-        
-        boolean validScore = giveCardUntilScorePasses(player, 17);
-        if(!validScore){
-            this.crownWinner(dealer);
-            return;
-        }
-
-        validScore = giveCardUntilScorePasses(dealer, player.score + 1);
-        if(!validScore){
-            this.crownWinner(player);
-            return;
-        }
-
-        this.crownWinner(dealer);
     }
 
     private void giveCardTo(Player player){
@@ -74,7 +68,7 @@ public class Blackjack {
         this.reporter.reportResult(dealer, player, winner);
     }
 
-    private static Player checkForInitialBlackjack(Player player, Player dealer){
+    private Player checkForInitialBlackjack(){
         if(hasBlackjack(player)){
             return player;
         } else if (hasBlackjack(dealer)){
@@ -83,9 +77,29 @@ public class Blackjack {
         return null;
     }
 
-    private static Player checkForInitialFourAces(Player player, Player dealer){
+    private Player checkForInitialFourAces(){
         int doubleAceScore = 22;
         return player.score == doubleAceScore && dealer.score == 22 ? dealer : null;
+    }
+
+
+    private Player startRoulette(){
+        // Start roulette for player
+        boolean validScore = startRouletteForPlayer(player, 17);
+        if(!validScore){
+            return dealer;
+        }
+
+        // Start roulette for dealer
+        validScore = startRouletteForPlayer(dealer, player.score + 1);
+        if(!validScore){
+            return player;
+        }
+
+        // the previous check loops until dealer score is higher than
+        // then player.score so we know that dealer has the highest score if we have
+        // gotten this far.
+        return dealer;
     }
 
     private static boolean hasBlackjack(Player player){
