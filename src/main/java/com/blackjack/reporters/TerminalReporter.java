@@ -1,21 +1,20 @@
 package com.blackjack.reporters;
 
-import java.util.List;
-
 import com.blackjack.Player;
 
 public class TerminalReporter implements IReporter {
 
     @Override
-    public void reportResult(List<Player> players, Player winner) {
+    public void reportResult(Player dealer, Player player, Player winner) {
         System.out.println(winner.name);
-        for(Player player: players){
-            System.out.println(player.name+": "+player.hand);
-        }
+        displayPlayerResult(player);
+        displayPlayerResult(dealer);
+    }
+
+    private void displayPlayerResult(Player player){
+        System.out.println(player.name+": "+player.hand);
     }
 
     @Override
-    public void reportNewState(List<Player> players) {
-        
-    }
+    public void reportNewState(Player dealer, Player player) {}
 }

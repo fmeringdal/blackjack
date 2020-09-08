@@ -3,19 +3,18 @@ package com.blackjack;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.blackjack.utils.Utils;
 
-public class CardList {
+public class CardList implements Iterable<Card> {
     private LinkedList<Card> cardList;
 
-    private CardList(String[] cardList){
-        this.cardList = Arrays.stream(cardList)
-            .map(Card::new)
-            .collect(Collectors.toCollection(LinkedList::new));
+    private CardList(String[] cardList) {
+        this.cardList = Arrays.stream(cardList).map(Card::new).collect(Collectors.toCollection(LinkedList::new));
     }
 
     public static CardList createFrom(String filepath) throws FileNotFoundException {
@@ -25,7 +24,7 @@ public class CardList {
         return new CardList(cardList);
     }
 
-    public static CardList createFrom(String[] cardList){
+    public static CardList createFrom(String[] cardList) {
         return new CardList(cardList);
     }
 
@@ -49,18 +48,25 @@ public class CardList {
         return new CardList(cardList);
     }
 
-    public Card pop(){
+    public Card pop() {
         return cardList.removeFirst();
     }
 
-    public void add(Card card){
-        this.cardList.add(card);
+    public void add(Card card) {
+        cardList.add(card);
+    }
+
+    public int size() {
+        return cardList.size();
     }
 
     @Override
     public String toString() {
-        return this.cardList.stream()
-        .map(card -> card.toString())
-        .collect(Collectors.joining(", "));
+        return cardList.stream().map(card -> card.toString()).collect(Collectors.joining(", "));
+    }
+
+    @Override
+    public Iterator<Card> iterator() {
+        return this.cardList.iterator();
     }
 }

@@ -1,69 +1,68 @@
 package com.blackjack;
-import com.blackjack.reporters.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.blackjack.reporters.IReporter;
 
 
 public class Blackjack {
     IReporter reporter;
     CardList deck;
-    List<Player> players;
+    Player player;
+    Player dealer;
 
-    public Blackjack(CardList cardList, IReporter reporter){
-        // init deps
+    public Blackjack(CardList deck, IReporter reporter, String playerName){
+        this.deck = deck;
         this.reporter = reporter;
-        deck = cardList;
-        this.players = new ArrayList<>();
+        // Initialize player and dealer
+        player = new Player(playerName);
+        dealer = new Player("dealer");
+    }
+
+    private void initializeHands(){
+        for(int i = 0; i < 4; i++){
+            giveCardTo(i%2 == 0 ? player : dealer);
+        }
+    }
+
+
+    private boolean giveCardUntilScorePasses(Player player, int maxScore){
+        while(player.score < maxScore){
+            giveCardTo(player);
+            if(player.score > 21){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void start(){
+        // Initialize hands
+        initializeHands();
 
-        // Create players and give them some cards
-        Player sam = new Player("sam");
-        Player dealer = new Player("dealer");
-        this.players.add(sam);
-        this.players.add(dealer);
-
-
-        for(int i = 0; i < 4; i++){
-            giveCardTo(i%2 == 0 ? sam : dealer);
+        Player winner = checkForInitialBlackjack(player, dealer);
+        if(winner != null){
+            this.crownWinner(winner);
+            return;
         }
 
-        // Check if we have a winner after initial cards
-        if(sam.score == 21){
-            this.crownWinner(sam);
-            return;
-        } else if (dealer.score == 21){
-            this.crownWinner(dealer);
+        winner = checkForInitialFourAces(player, dealer);
+        if(winner != null){
+            this.crownWinner(winner);
             return;
         }
         
-        if(dealer.score == 22 && sam.score == 22){
+        boolean validScore = giveCardUntilScorePasses(player, 17);
+        if(!validScore){
             this.crownWinner(dealer);
             return;
         }
 
-        // Some while logic
-        while(sam.score < 17){
-            giveCardTo(sam);
-            if(sam.score > 21){
-                this.crownWinner(dealer);
-                return;
-            }
-        }
-
-        // Some while logic
-        while(dealer.score <= sam.score){
-            giveCardTo(dealer);
-            if(dealer.score > 21){
-                this.crownWinner(sam);
-                return;
-            }
+        validScore = giveCardUntilScorePasses(dealer, player.score + 1);
+        if(!validScore){
+            this.crownWinner(player);
+            return;
         }
 
         this.crownWinner(dealer);
-
     }
 
     private void giveCardTo(Player player){
@@ -72,7 +71,25 @@ public class Blackjack {
     }
 
     private void crownWinner(Player winner){
-        this.reporter.reportResult(this.players, winner);
+        this.reporter.reportResult(dealer, player, winner);
+    }
+
+    private static Player checkForInitialBlackjack(Player player, Player dealer){
+        if(hasBlackjack(player)){
+            return player;
+        } else if (hasBlackjack(dealer)){
+            return dealer;
+        }
+        return null;
+    }
+
+    private static Player checkForInitialFourAces(Player player, Player dealer){
+        int doubleAceScore = 22;
+        return player.score == doubleAceScore && dealer.score == 22 ? dealer : null;
+    }
+
+    private static boolean hasBlackjack(Player player){
+        return player.score == 21;
     }
 }
 

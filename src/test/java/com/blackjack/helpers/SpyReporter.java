@@ -1,26 +1,26 @@
 package com.blackjack.helpers;
 
-import java.util.List;
-
 import com.blackjack.Player;
 import com.blackjack.reporters.IReporter;
 
 public class SpyReporter implements IReporter {
 
-    public List<Player> players;
+    public Player dealer;
+    public Player player;
     public Player winner;
 
 
     @Override
-    public void reportResult(List<Player> players, Player winner) {
-        this.players = players;
+    public void reportResult(Player dealer, Player player, Player winner) {
+        this.player = player;
+        this.dealer = dealer;
         this.winner = winner;
-
     }
 
     @Override
-    public void reportNewState(List<Player> players) {
-        this.players = players;
+    public void reportNewState(Player dealer, Player player) {
+        this.player = player;
+        this.dealer = dealer;
     }
     
 }
